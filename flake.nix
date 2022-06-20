@@ -23,10 +23,19 @@
 
       overlays.default = final: prev: {
         riscv = packages.${prev.system};
-      };
+      } // (
+        if prev.stdenv.hostPlatform.isRiscV
+        then (import ./overlays/host.nix final prev)
+        else { }
+      );
 
       packages = forAllSystems (system: import ./pkgs {
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            overlays.default
+          ];
+        };
       });
 
       nixosConfigurations.example = nixpkgs.lib.nixosSystem {
