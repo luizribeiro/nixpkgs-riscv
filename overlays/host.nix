@@ -14,6 +14,9 @@ rec {
   libffi = prev.libffi.overrideAttrs (_old: {
     doCheck = false;
   });
+  libseccomp = prev.libffi.overrideAttrs (_old: {
+    doCheck = false;
+  });
   libuv = prev.libuv.overrideAttrs (_old: {
     # TODO: only disable these tests
     # "fork_threadpool_queue_work_simple"
@@ -70,6 +73,9 @@ rec {
       pytest-xdist = python-prev.pytest-xdist.overrideAttrs (_old: {
         doCheck = false;
         doInstallCheck = false;
+      });
+      hypothesis = python-prev.hypothesis.overrideAttrs (_old: {
+        doCheck = false;
       });
       requests = python-prev.requests.overrideAttrs (_old: {
         disabledTests = [
