@@ -113,3 +113,34 @@ rec {
     pythonPackages310 = python310.pkgs;
   }
 )
+
+  // (
+  let
+    llvmPatch = ''
+      rm test/ExecutionEngine/frem.ll
+      rm test/ExecutionEngine/mov64zext32.ll
+      rm test/ExecutionEngine/test-interp-vec-arithm_float.ll
+      rm test/ExecutionEngine/test-interp-vec-arithm_int.ll
+      rm test/ExecutionEngine/test-interp-vec-logical.ll
+      rm test/ExecutionEngine/test-interp-vec-setcond-fp.ll
+      rm test/ExecutionEngine/test-interp-vec-setcond-int.ll
+      substituteInPlace unittests/Support/CMakeLists.txt \
+        --replace "CrashRecoveryTest.cpp" ""
+      rm unittests/Support/CrashRecoveryTest.cpp
+      substituteInPlace unittests/ExecutionEngine/Orc/CMakeLists.txt \
+        --replace "OrcCAPITest.cpp" ""
+      rm unittests/ExecutionEngine/Orc/OrcCAPITest.cpp
+    '';
+  in
+  rec {
+    llvmPackages_14 = prev.llvmPackages_14 // {
+      # FIXME: not sure why I have to override both llvm and libllvm?
+      llvm = prev.llvmPackages_14.llvm.overrideAttrs (old: {
+        postPatch = old.postPatch + llvmPatch;
+      });
+      libllvm = prev.llvmPackages_14.libllvm.overrideAttrs (old: {
+        postPatch = old.postPatch + llvmPatch;
+      });
+    };
+  }
+)
