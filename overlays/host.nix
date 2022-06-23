@@ -130,7 +130,7 @@ rec {
   }
 )
 
-  // (
+// (
   let
     llvmPatch = ''
       rm test/ExecutionEngine/frem.ll
@@ -158,5 +158,30 @@ rec {
         postPatch = old.postPatch + llvmPatch;
       });
     };
+  }
+
+) // (
+  let
+    bootstrapVersion = "1.17.10";
+    go_bootstrap = prev.fetchurl {
+      # built as:
+      #  nix build .\#pkgsCross.riscv64.pkgsStatic.go
+      #  tar cvzf go-riscv64-unknown-linux-gnu-1.17.10.tar.gz -C result .
+      url = "https://public.tpl.wtf/~luiz/go-riscv64-unknown-linux-gnu-${bootstrapVersion}.tar.gz";
+      sha256 = "sha256-gcS1rne5xH7O9b3GT60GuxbnOeICo7YyhFe2fmV3Jog=";
+    };
+    goBootstrap = prev.runCommand "go-bootstrap" { } ''
+      mkdir $out
+      tar xvf ${go_bootstrap}
+      cp -r . $out/
+    '';
+    overriddenAttrs = {
+      GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+      disallowedReferences = [ goBootstrap ];
+    };
+  in
+  {
+    go_1_17 = prev.go_1_17.overrideAttrs (_old: overridenAttrs);
+    go_1_18 = prev.go_1_18.overrideAttrs (_old: overridenAttrs);
   }
 )
