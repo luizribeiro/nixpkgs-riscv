@@ -54,19 +54,35 @@ rec {
       rm tests/pexpects/torn_escapes.py
     '';
   });
+  mdbook = prev.mdbook.overrideAttrs (old: {
+    checkFlags = [
+      "--exact"
+      "--skip missing_optional_backends_are_not_fatal"
+    ];
+  });
+  ripgrep = prev.mdbook.overrideAttrs (old: {
+    checkFlags = [
+      "--exact"
+      "--skip misc::compressed_brotli"
+      "--skip misc::compressed_lz4"
+      "--skip misc::compressed_zstd"
+    ];
+  });
   zstd = prev.zstd.overrideAttrs (old: {
     LDFLAGS = "-latomic";
   });
-  nix = prev.nix.overrideAttrs (old: {
+  nix = (prev.nix.overrideAttrs (old: {
     preInstallCheck = old.preInstallCheck + ''
       echo "exit 99" > tests/check.sh
       echo "exit 99" > tests/remote-store.sh
       echo "exit 99" > tests/fetchurl.sh
       echo "exit 99" > tests/secure-drv-outputs.sh
     '';
-  });
+  })).override
+    {
+      withLibseccomp = false;
+    };
 }
-# TODO: add rust packages mdbook, ripgrep
 
 // (
   let
