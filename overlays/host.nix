@@ -65,9 +65,10 @@ rec {
       echo "exit 99" > tests/secure-drv-outputs.sh
     '';
   });
-  # TODO: add rust packages mdbook, ripgrep
+}
+# TODO: add rust packages mdbook, ripgrep
 
-} // (
+// (
   let
     packageOverrides = python-final: python-prev: {
       pytest-xdist = python-prev.pytest-xdist.overrideAttrs (_old: {
@@ -76,9 +77,10 @@ rec {
       });
       hypothesis = python-prev.hypothesis.overrideAttrs (_old: {
         doCheck = false;
+        doInstallCheck = false;
       });
-      requests = python-prev.requests.overrideAttrs (_old: {
-        disabledTests = [
+      requests = python-prev.requests.overrideAttrs (old: {
+        disabledTests = old.disabledTests ++ [
           "test_basic"
           "test_basic_response"
           "test_basic_waiting_server"
