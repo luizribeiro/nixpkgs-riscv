@@ -46,6 +46,13 @@ rec {
   ell = prev.ell.overrideAttrs (_old: {
     doCheck = false;
   });
+  fd = prev.fd.overrideAttrs (old: {
+    checkFlags = [
+      "--exact"
+      "--skip test_follow_broken_symlink"
+      "--skip test_invalid_utf8"
+    ];
+  });
   fish = prev.fish.overrideAttrs (old: {
     LDFLAGS = "-latomic";
     postPatch = old.postPatch + ''
@@ -60,7 +67,7 @@ rec {
       "--skip missing_optional_backends_are_not_fatal"
     ];
   });
-  ripgrep = prev.mdbook.overrideAttrs (old: {
+  ripgrep = prev.ripgrep.overrideAttrs (old: {
     checkFlags = [
       "--exact"
       "--skip misc::compressed_brotli"
@@ -178,10 +185,11 @@ rec {
     overriddenAttrs = {
       GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
       disallowedReferences = [ goBootstrap ];
+      doCheck = false;
     };
   in
   {
-    go_1_17 = prev.go_1_17.overrideAttrs (_old: overridenAttrs);
-    go_1_18 = prev.go_1_18.overrideAttrs (_old: overridenAttrs);
+    go_1_17 = prev.go_1_17.overrideAttrs (_old: overriddenAttrs);
+    go_1_18 = prev.go_1_18.overrideAttrs (_old: overriddenAttrs);
   }
 )
