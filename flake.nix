@@ -38,6 +38,10 @@
         };
       });
 
+      # an example which builds a riscv64 image natively from a riscv64 host.
+      # note that this can be done from a x86_64 host using binfmt.
+      # build this image with:
+      #   nix build .\#nixosConfigurations.example.config.system.build.sdImage
       nixosConfigurations.example = nixpkgs.lib.nixosSystem {
         system = "riscv64-linux";
         specialArgs = inputs;
@@ -52,5 +56,26 @@
         ];
       };
 
+      # an example which uses cross-compilation from x86_64-linux to riscv64
+      # build this image with:
+      #   nix build .\#nixosConfigurations.example.config.system.build.sdImage
+      nixosConfigurations.example-cross = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [
+          {
+            nixpkgs.overlays = [
+              overlays.default
+            ];
+
+            nixpkgs.crossSystem = {
+              config = "riscv64-unknown-linux-gnu";
+              system = "riscv64-linux";
+            };
+          }
+          nixosModules.sd-image-riscv64-visionfive-installer
+          ./example/configuration.nix
+        ];
+      };
     };
 }
