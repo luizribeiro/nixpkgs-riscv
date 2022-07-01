@@ -26,6 +26,11 @@ rec {
     # "udp_no_autobind"
     doCheck = false;
   });
+  neovim-unwrapped = prev.neovim-unwrapped.override {
+    # luajit (default value for lua here) doesn't support riscv64,
+    # so use regular lua instead
+    lua = prev.lua;
+  };
   nlohmann_json = prev.nlohmann_json.overrideAttrs (_old: {
     doCheck = false;
   });
