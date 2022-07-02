@@ -26,19 +26,11 @@ rec {
     # "udp_no_autobind"
     doCheck = false;
   });
-  neovim-unwrapped = prev.neovim-unwrapped.override {
-    # luajit (default value for lua here) doesn't support riscv64,
-    # so use regular lua instead
-    lua = prev.lua5_1 // {
-      pkgs = prev.lua5_1.pkgs // {
-        libluv = prev.lua5_1.pkgs.libluv.overrideAttrs (old: {
-          cmakeFlags = old.cmakeFlags ++ [
-            "-DWITH_LUA_ENGINE=Lua"
-          ];
-        });
-      };
-    };
-  };
+  # TODO: fix neovim once riscv64 support lands on luajit
+  # see https://github.com/LuaJIT/LuaJIT/issues/628
+  # since neovim doesn't compile against lua 5.1 properly anymore it seems.
+  # just pretending vim is neovim for now.. ugh
+  neovim = prev.vim;
   nlohmann_json = prev.nlohmann_json.overrideAttrs (_old: {
     doCheck = false;
   });
