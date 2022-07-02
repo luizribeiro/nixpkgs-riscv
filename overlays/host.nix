@@ -29,7 +29,15 @@ rec {
   neovim-unwrapped = prev.neovim-unwrapped.override {
     # luajit (default value for lua here) doesn't support riscv64,
     # so use regular lua instead
-    lua = prev.lua;
+    lua = prev.lua // {
+      pkgs = prev.lua.pkgs // {
+        libluv = prev.lua.pkgs.libluv.overrideAttrs (old: {
+          cmakeFlags = old.cmakeFlags ++ [
+            "-DWITH_LUA_ENGINE=Lua"
+          ];
+        });
+      };
+    };
   };
   nlohmann_json = prev.nlohmann_json.overrideAttrs (_old: {
     doCheck = false;
