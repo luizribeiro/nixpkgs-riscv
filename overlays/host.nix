@@ -29,9 +29,9 @@ rec {
   neovim-unwrapped = prev.neovim-unwrapped.override {
     # luajit (default value for lua here) doesn't support riscv64,
     # so use regular lua instead
-    lua = prev.lua // {
-      pkgs = prev.lua.pkgs // {
-        libluv = prev.lua.pkgs.libluv.overrideAttrs (old: {
+    lua = prev.lua5_1 // {
+      pkgs = prev.lua5_1.pkgs // {
+        libluv = prev.lua5_1.pkgs.libluv.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags ++ [
             "-DWITH_LUA_ENGINE=Lua"
           ];
