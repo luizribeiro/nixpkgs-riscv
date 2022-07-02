@@ -97,6 +97,9 @@ rec {
 // (
   let
     packageOverrides = python-final: python-prev: {
+      pandas = python-prev.pandas.overrideAttrs (_old: {
+        doCheck = false;
+      });
       pytest-xdist = python-prev.pytest-xdist.overrideAttrs (_old: {
         doCheck = false;
         doInstallCheck = false;
