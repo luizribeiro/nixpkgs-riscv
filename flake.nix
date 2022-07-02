@@ -27,6 +27,10 @@
         if prev.stdenv.hostPlatform.isRiscV
         then (import ./overlays/host.nix final prev)
         else { }
+      ) // (
+        if prev.stdenv.targetPlatform.isRiscV
+        then (import ./overlays/target.nix final prev)
+        else { }
       );
 
       packages = forAllSystems (system: import ./pkgs {
