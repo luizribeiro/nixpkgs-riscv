@@ -14,6 +14,11 @@
     in
     rec {
       nixosModules = {
+        sd-image-riscv64-visionfive = {
+          imports = [
+            ./modules/installer/sd-card/sd-image-riscv64-visionfive.nix
+          ];
+        };
         sd-image-riscv64-visionfive-installer = import
           ./modules/installer/sd-card/sd-image-riscv64-visionfive-installer.nix
           {
