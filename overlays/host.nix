@@ -101,6 +101,10 @@ rec {
         doCheck = false;
         doInstallCheck = false;
       });
+      ttp = python-prev.ttp.overrideAttrs (_old: {
+        doCheck = false;
+        doInstallCheck = false;
+      });
       pytest-xdist = python-prev.pytest-xdist.overrideAttrs (_old: {
         doCheck = false;
         doInstallCheck = false;
