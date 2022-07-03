@@ -79,6 +79,7 @@ rec {
     ];
   });
   zstd = prev.zstd.overrideAttrs (old: {
+    # PR: https://github.com/NixOS/nixpkgs/pull/180028
     LDFLAGS = "-latomic";
   });
   nix = (prev.nix.overrideAttrs (old: {
