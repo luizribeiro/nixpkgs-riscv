@@ -14,6 +14,11 @@
     in
     rec {
       nixosModules = {
+        overlay = {
+          nixpkgs.overlays = [
+            overlays.default
+          ];
+        };
         sd-image-riscv64-visionfive = {
           imports = [
             ./modules/installer/sd-card/sd-image-riscv64-visionfive.nix
