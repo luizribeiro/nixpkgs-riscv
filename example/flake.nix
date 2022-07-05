@@ -12,11 +12,7 @@
       system = "riscv64-linux";
       specialArgs = inputs;
       modules = [
-        {
-          nixpkgs.overlays = [
-            nixpkgs-riscv.overlays.default
-          ];
-        }
+        nixpkgs-riscv.nixosModules.overlay
         nixpkgs-riscv.nixosModules.sd-image-riscv64-visionfive
         ./configuration.nix
       ];
