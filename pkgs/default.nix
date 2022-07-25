@@ -20,7 +20,7 @@ let
 in
 rec {
   linux_visionfive = callPackage ./linux-visionfive.nix rec {
-    kernel = linuxKernel.kernels.linux_5_17;
+    kernel = linuxKernel.kernels.linux_5_18;
     kernelPatches = kernel.kernelPatches;
   };
   linuxPackages_visionfive = recurseIntoAttrs

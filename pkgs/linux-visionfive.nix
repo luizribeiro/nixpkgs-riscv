@@ -5,7 +5,7 @@
 } @ args:
 
 let
-  modDirVersion = "5.17.7";
+  modDirVersion = "5.18.5";
 in
 buildLinux (args // {
   inherit modDirVersion;
@@ -14,8 +14,8 @@ buildLinux (args // {
   src = fetchFromGitHub {
     owner = "starfive-tech";
     repo = "linux";
-    rev = "f4a66b4394b13a30e9eec4dfc651f16fce285e2b";
-    sha256 = "14h1q0ssigaw70a1i08xpinbspcrk7dhbk7z2xhmrii0v89a5y8r";
+    rev = "8fb50a9b3e5d401d4ec169c858e8b7ba0a542955";
+    sha256 = "sha256-kjOoNJhmmQdpmtx0m1ZovH3mj2x4NB6iInEknxZq8Dw=";
   };
 
   defconfig = "starfive_jh7100_fedora_defconfig";
@@ -34,7 +34,7 @@ buildLinux (args // {
   };
 
   extraMeta = {
-    branch = "visionfive-5.17.y";
+    branch = "visionfive-5.18.y";
     maintainers = with lib.maintainers; [ Madouura zhaofengli ius ];
     description = "Linux kernel for StarFive's JH7100 RISC-V SoC (VisionFive)";
     platforms = [ "riscv64-linux" ];
